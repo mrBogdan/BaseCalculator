@@ -44,28 +44,6 @@ class Stack {
   }
 }
 
-class Queue {
-  constructor() {
-      this.memory = [];
-  }
-
-  push(value) {
-      this.memory.push(value);
-  }
-
-  pop() {
-      return this.memory.shift();
-  }
-
-  top() {
-      return this.memory[0];
-  }
-
-  isEmpty() {
-      return this.memory.length === 0;
-  }
-}
-
 class Node {
   constructor(key, parent) {
       this.key = key;
@@ -272,6 +250,7 @@ const execute = (structure) => {
   let leftOperand = null;
   let operation = null;
   let result = null;
+  let sign = 1;
 
   while(!stack.isEmpty()) {
     currentNode = stack.top();
@@ -297,7 +276,7 @@ const execute = (structure) => {
     const key = currentNode.getKey();
 
     if (isNumber(key)) {
-      if (leftOperand && operation) {
+      if (!isNull(leftOperand) && operation) {
         const rightOperand = key;
 
         switch(operation) {
@@ -306,7 +285,7 @@ const execute = (structure) => {
               leftOperand = result;
             }
 
-            result = leftOperand + rightOperand;
+            result = leftOperand + rightOperand * sign;
             visited.add(currentNode);
             stack.pop();
             continue;
@@ -316,7 +295,7 @@ const execute = (structure) => {
               leftOperand = result;
             }
 
-            result = leftOperand - rightOperand;
+            result = leftOperand - rightOperand * sign;
             visited.add(currentNode);
             stack.pop();
             continue;
@@ -324,23 +303,13 @@ const execute = (structure) => {
         }
       }
 
-      if (!leftOperand) {
+      if (isNull(leftOperand)) {
         if (isNull(result)) {
-          result = key;
-        }
-
-        if (operation && operation === OPERATIONS.MINUS) {
-          rightOperand = key * -1;
-
-          if (isNull(result)) {
-            result = rightOperand;
+          if (operation && operation === OPERATIONS.MINUS) {
+            result = key * -1 ;
           } else {
-            leftOperand = result;
-          }
-          
-          visited.add(currentNode);
-          stack.pop();
-          continue;
+            result = key;
+          }          
         }
 
         leftOperand = key;
@@ -353,8 +322,17 @@ const execute = (structure) => {
     }
 
     switch(key) {
-      case OPERATIONS.PLUS:
+      case OPERATIONS.PLUS: {
+        operation = key;
+        visited.add(currentNode);
+        stack.pop();
+        break;
+      }
       case OPERATIONS.MINUS: {
+        if (operation && operation === OPERATIONS.MINUS) {
+          sign = -1;
+        }
+
         operation = key;
         visited.add(currentNode);
         stack.pop();
@@ -380,86 +358,100 @@ const calculate = (s) => {
   return execute(structure);
 };
 
-// void function test() {
-//   const result = calculate('1 + 1');
+void function TestSimpleExpression() {
+  const result = calculate('1 + 1');
   
-//   assert.equal(result, 2);
-//   assert.notEqual(result, 3);
-// }();
+  assert.equal(result, 2);
+  assert.notEqual(result, 3);
+}();
 
-// void function TestWithBrackets() {
-//   const result = calculate('(1 + 1)');
+void function TestWithBrackets() {
+  const result = calculate('(1 + 2)');
   
-//   assert.equal(result, 2);
-//   assert.notEqual(result, 3);
-// }();
+  assert.equal(result, 3);
+  assert.notEqual(result, 4);
+}();
 
-// void function TestWithBrackets() {
-//   const result = calculate('(1 + 1) + 1');
+void function TestWithBrackets() {
+  const result = calculate('(1 + 1) + 2');
   
-//   assert.equal(result, 3);
-//   assert.notEqual(result, 4);
-// }();
+  assert.equal(result, 4);
+  assert.notEqual(result, 5);
+}();
 
-// void function TestWithBrackets() {
-//   const result = calculate('(1 + 1) + (1 + 3)');
+void function TestWithBrackets() {
+  const result = calculate('(1 + 1) + (1 + 3)');
   
-//   assert.equal(result, 6);
-//   assert.notEqual(result, 7);
-// }();
+  assert.equal(result, 6);
+  assert.notEqual(result, 7);
+}();
 
-// void function MoreComplexTest() {
-//   const result = calculate('(1+(4+5+2)+3)+(6+8)');
+void function MoreComplexTest() {
+  const result = calculate('(1+(4+5+2)+3)+(6+8)');
   
-//   assert.equal(result, 29);
-//   assert.notEqual(result, 30);
-// }();
+  assert.equal(result, 29);
+  assert.notEqual(result, 30);
+}();
 
-// void function AddMinusImplementationTest() {
-//   const result = calculate('1 - 1');
+void function AddMinusImplementationTest() {
+  const result = calculate('1 - 1');
   
-//   assert.equal(result, 0);
-//   assert.notEqual(result, 1);
-// }();
+  assert.equal(result, 0);
+  assert.notEqual(result, 1);
+}();
 
-// void function AddMinusImplementationWithBracketsTest() {
-//   const result = calculate('(1 - 1)');
+void function AddMinusImplementationWithBracketsTest() {
+  const result = calculate('(1 - 1)');
   
-//   assert.equal(result, 0);
-//   assert.notEqual(result, 1);
-// }();
+  assert.equal(result, 0);
+  assert.notEqual(result, 1);
+}();
 
-// void function MoreComplexExampleWithMinusTest() {
-//   const result = calculate('(1 - 1) + 1');
+void function MoreComplexExampleWithMinusTest() {
+  const result = calculate('(1 - 1) + 1');
   
-//   assert.equal(result, 1);
-//   assert.notEqual(result, 2);
-// }();
+  assert.equal(result, 1);
+  assert.notEqual(result, 2);
+}();
 
-// void function DifferentOperationsAndAlotBracketsTest() {
-//   const result = calculate('(1+(4+5+2)-3)+(6+8)');
+void function DifferentOperationsAndAlotBracketsTest() {
+  const result = calculate('(1+(4+5+2)-3)+(6+8)');
   
-//   assert.equal(result, 23);
-//   assert.notEqual(result, 24);
-// }();
+  assert.equal(result, 23);
+  assert.notEqual(result, 24);
+}();
 
-// void function NegativeResultTest() {
-//   const result = calculate('1 + (-2)');
+void function NegativeResultTest() {
+  const result = calculate('1 + (-2)');
 
-//   assert.equal(result, -1);
-//   assert.notEqual(result, 2); 
-// }();
+  assert.equal(result, -1);
+  assert.notEqual(result, 2); 
+}();
 
-// void function UnaryMinusTest() {
-//   const result = calculate('1 + (-1)');
+void function UnaryMinusTest() {
+  const result = calculate('1 + (-1)');
 
-//   assert.equal(result, 0);
-//   assert.notEqual(result, 2); 
-// }();
+  assert.equal(result, 0);
+  assert.notEqual(result, 2); 
+}();
 
 void function MinusOnMinusTest() {
   const result = calculate('1 - (-2)');
 
   assert.equal(result, 3);
   assert.notEqual(result, 2); 
+}();
+
+void function SumWithNegativeNumberTest() {
+  const result = calculate('-2 + 1');
+
+  assert.equal(result, -1);
+  assert.notEqual(result, 3);
+}();
+
+void function Test() {
+  const result = calculate('- (3 + (4 + 5)');
+
+  assert.equal(result, -12);
+  assert.notEqual(result, 6);
 }();
