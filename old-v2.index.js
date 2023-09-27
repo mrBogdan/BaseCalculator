@@ -1,7 +1,4 @@
 const assert = require('node:assert');
-const test = require('node:test');
-
-const { describe, it } = test;
 
 const TOKENS = {
   PLUS: '+',
@@ -365,102 +362,100 @@ const calculate = (s) => {
   return execute(structure);
 };
 
-describe('Calculator tests', () => {
-  it('Simple expression, should return 2', () => {
-    const result = calculate('1 + 1');
+void function TestSimpleExpression() {
+  const result = calculate('1 + 1');
   
-    assert.equal(result, 2);
-    assert.notEqual(result, 3);
-  });
+  assert.equal(result, 2);
+  assert.notEqual(result, 3);
+}();
 
-  it('Test with brackets, should return 3', () => {
-    const result = calculate('(1 + 2)');
+void function TestWithBrackets() {
+  const result = calculate('(1 + 2)');
   
-    assert.equal(result, 3);
-    assert.notEqual(result, 4);
-  });
+  assert.equal(result, 3);
+  assert.notEqual(result, 4);
+}();
 
-  it('Test with brackets and number', () => {
-    const result = calculate('(1 + 1) + 2');
+void function TestWithBrackets() {
+  const result = calculate('(1 + 1) + 2');
   
-    assert.equal(result, 4);
-    assert.notEqual(result, 5);
-  });
+  assert.equal(result, 4);
+  assert.notEqual(result, 5);
+}();
 
-  it('Test two complex expressions, should return 6', () => {
-    const result = calculate('(1 + 1) + (1 + 3)');
+void function TestWithBrackets() {
+  const result = calculate('(1 + 1) + (1 + 3)');
   
-    assert.equal(result, 6);
-    assert.notEqual(result, 7);
-  });
+  assert.equal(result, 6);
+  assert.notEqual(result, 7);
+}();
 
-  it('Really complex expression, should return 29', () => {
-    const result = calculate('(1+(4+5+2)+3)+(6+8)');
+void function MoreComplexTest() {
+  const result = calculate('(1+(4+5+2)+3)+(6+8)');
   
-    assert.equal(result, 29);
-    assert.notEqual(result, 30);
-  });
+  assert.equal(result, 29);
+  assert.notEqual(result, 30);
+}();
 
-  it('Simple minus expression', () => {
-    const result = calculate('1 - 1');
+void function AddMinusImplementationTest() {
+  const result = calculate('1 - 1');
   
-    assert.equal(result, 0);
-    assert.notEqual(result, 1);
-  });
+  assert.equal(result, 0);
+  assert.notEqual(result, 1);
+}();
 
-  it('Minus with brackets', () => {
-    const result = calculate('(1 - 1)');
+void function AddMinusImplementationWithBracketsTest() {
+  const result = calculate('(1 - 1)');
   
-    assert.equal(result, 0);
-    assert.notEqual(result, 1);
-  });
+  assert.equal(result, 0);
+  assert.notEqual(result, 1);
+}();
 
-  it('Minus in brackets and next adding number', () => {
-    const result = calculate('(1 - 1) + 1');
+void function MoreComplexExampleWithMinusTest() {
+  const result = calculate('(1 - 1) + 1');
   
-    assert.equal(result, 1);
-    assert.notEqual(result, 2);
-  });
+  assert.equal(result, 1);
+  assert.notEqual(result, 2);
+}();
 
-  it('Complex expression with minus', () => {
-    const result = calculate('(1+(4+5+2)-3)+(6+8)');
+void function DifferentOperationsAndAlotBracketsTest() {
+  const result = calculate('(1+(4+5+2)-3)+(6+8)');
   
-    assert.equal(result, 23);
-    assert.notEqual(result, 24);
-  });
+  assert.equal(result, 23);
+  assert.notEqual(result, 24);
+}();
 
-  it('Adding bigger negative number', () => {
-    const result = calculate('1 + (-2)');
+void function NegativeResultTest() {
+  const result = calculate('1 + (-2)');
 
-    assert.equal(result, -1);
-    assert.notEqual(result, 2); 
-  });
+  assert.equal(result, -1);
+  assert.notEqual(result, 2); 
+}();
 
-  it('Unary minus test case', () => {
-    const result = calculate('1 + (-1)');
+void function UnaryMinusTest() {
+  const result = calculate('1 + (-1)');
 
-    assert.equal(result, 0);
-    assert.notEqual(result, 2); 
-  });
+  assert.equal(result, 0);
+  assert.notEqual(result, 2); 
+}();
 
-  it('Double minus test', () => {
-    const result = calculate('1 - (-2)');
+void function MinusOnMinusTest() {
+  const result = calculate('1 - (-2)');
 
-    assert.equal(result, 3);
-    assert.notEqual(result, 2); 
-  });
+  assert.equal(result, 3);
+  assert.notEqual(result, 2); 
+}();
 
-  it('Adding negative number', () => {
-    const result = calculate('-2 + 1');
+void function SumWithNegativeNumberTest() {
+  const result = calculate('-2 + 1');
 
-    assert.equal(result, -1);
-    assert.notEqual(result, 3);
-  });
+  assert.equal(result, -1);
+  assert.notEqual(result, 3);
+}();
 
-  it('Nevative after all', () => {
-    const result = calculate('- (3 + (4 + 5)');
+void function Test() {
+  const result = calculate('- (3 + (4 + 5)');
 
-    assert.equal(result, -12);
-    assert.notEqual(result, 6);
-  });
-});
+  assert.equal(result, -12);
+  assert.notEqual(result, 6);
+}();
